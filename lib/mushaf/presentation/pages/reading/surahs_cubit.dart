@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran/mushaf/domain/use_cases/get_surahs_use_case.dart';
-import 'package:quran/mushaf/presentation/pages/surahs_states.dart';
+import 'package:quran/mushaf/presentation/pages/reading/surahs_states.dart';
 
 class SurahsCubit extends Cubit<SurahsStates>
 {

@@ -7,7 +7,8 @@ extension ApiSurahModelMapper on ApiSurah {
     return SurahModel(
         name: name ?? "",
         number: number ?? 0,
-        ayahs: ayahs?.map((e) => e.map()).toList());
+        ayahs: ayahs?.map((e) => e.map()).toList(),
+      revelationType: revelationType);
   }
 }
 

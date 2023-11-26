@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran/mushaf/di/mushaf_di.dart';
-import 'package:quran/mushaf/presentation/pages/surahs_cubit.dart';
-import 'package:quran/mushaf/presentation/pages/surahs_page.dart';
+import 'package:quran/mushaf/presentation/pages/home.dart';
+import 'package:quran/mushaf/presentation/pages/listening/surahs_cubit.dart';
+import 'package:quran/mushaf/presentation/pages/reading/surahs_cubit.dart';
+import 'package:quran/mushaf/presentation/pages/reading/surahs_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +19,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+            backgroundColor: Colors.white,
+            primarySwatch: MaterialColor(
+                Colors.white.value,
+                const {}
+            )
+        )
+      ),
         debugShowCheckedModeBanner: false,
-        home: BlocProvider(
-          create: (context) => SurahsCubit(injector()),
-          child: const SurahsPage(),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => SurahsCubit(injector()),
+            ),
+            BlocProvider(
+              create: (context) => ListeningCubit(injector()),
+            ),
+          ], child: const HomePage(),
         ));
   }
 }

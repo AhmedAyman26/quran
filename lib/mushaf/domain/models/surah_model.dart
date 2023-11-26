@@ -6,9 +6,10 @@ class SurahModel extends Equatable
   final String? name;
   final int? number;
   final List<AyahModel>? ayahs;
+  final String? revelationType;
 
-  const SurahModel({this.name, this.number, this.ayahs});
+  const SurahModel( {this.name, this.number, this.ayahs,this.revelationType,});
 
   @override
-  List<Object?> get props => [name,number,ayahs];
+  List<Object?> get props => [name,number,ayahs,revelationType,];
 }

@@ -83,7 +83,7 @@ class ApiSurah {
   String? name;
   String? englishName;
   String? englishNameTranslation;
-  RevelationType? revelationType;
+  String? revelationType;
   List<ApiAyah>? ayahs;
 
   ApiSurah({
@@ -100,7 +100,7 @@ class ApiSurah {
     name: json["name"],
     englishName: json["englishName"],
     englishNameTranslation: json["englishNameTranslation"],
-    revelationType: revelationTypeValues.map[json["revelationType"]]!,
+    revelationType: json["revelationType"]!,
     ayahs: json["ayahs"] == null ? [] : List<ApiAyah>.from(json["ayahs"]!.map((x) => ApiAyah.fromJson(x))),
   );
 
@@ -109,7 +109,7 @@ class ApiSurah {
     "name": name,
     "englishName": englishName,
     "englishNameTranslation": englishNameTranslation,
-    "revelationType": revelationTypeValues.reverse[revelationType],
+    "revelationType": revelationType,
     "ayahs": ayahs == null ? [] : List<dynamic>.from(ayahs!.map((x) => x.toJson())),
   };
 }
@@ -161,24 +161,4 @@ class ApiAyah {
   };
 }
 
-enum RevelationType {
-  MECCAN,
-  MEDINAN
-}
 
-final revelationTypeValues = EnumValues({
-  "Meccan": RevelationType.MECCAN,
-  "Medinan": RevelationType.MEDINAN
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
-}
