@@ -8,13 +8,13 @@ extension ApiSurahModelMapper on ApiSurah {
         name: name ?? "",
         number: number ?? 0,
         ayahs: ayahs?.map((e) => e.map()).toList(),
-      revelationType: revelationType);
+        revelationType: revelationType);
   }
 }
 
 extension ApiAyahModelMapper on ApiAyah {
   AyahModel map() {
     return AyahModel(
-        number: number ?? 0, text: text ?? "", sajda: sajda ?? false);
+        number: number ?? 0, text: text ?? "", sajda: sajda ?? false,audio: audio??'');
   }
 }

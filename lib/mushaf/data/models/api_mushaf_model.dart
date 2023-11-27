@@ -124,6 +124,7 @@ class ApiAyah {
   int? ruku;
   int? hizbQuarter;
   bool? sajda;
+  String? audio;
 
   ApiAyah({
     this.number,
@@ -135,6 +136,7 @@ class ApiAyah {
     this.ruku,
     this.hizbQuarter,
     this.sajda,
+    this.audio
   });
 
   factory ApiAyah.fromJson(Map<String, dynamic> json) => ApiAyah(
@@ -146,6 +148,7 @@ class ApiAyah {
     page: json["page"],
     ruku: json["ruku"],
     hizbQuarter: json["hizbQuarter"],
+    audio: json["audio"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -158,6 +161,7 @@ class ApiAyah {
     "ruku": ruku,
     "hizbQuarter": hizbQuarter,
     "sajda": sajda,
+    "audio":audio
   };
 }
 

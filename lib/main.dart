@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran/mushaf/di/mushaf_di.dart';
 import 'package:quran/mushaf/presentation/pages/home.dart';
-import 'package:quran/mushaf/presentation/pages/listening/surahs_cubit.dart';
+import 'package:quran/mushaf/presentation/pages/listening/listening_cubit.dart';
 import 'package:quran/mushaf/presentation/pages/reading/surahs_cubit.dart';
 import 'package:quran/mushaf/presentation/pages/reading/surahs_page.dart';
 
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
               create: (context) => SurahsCubit(injector()),
             ),
             BlocProvider(
-              create: (context) => ListeningCubit(injector()),
+              create: (context) => ListeningCubit(injector(),injector()),
             ),
           ], child: const HomePage(),
         ));

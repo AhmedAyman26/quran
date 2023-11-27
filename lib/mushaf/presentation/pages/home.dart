@@ -15,13 +15,14 @@ class _HomePageState extends State<HomePage> {
       text: 'Reading',
     ),
     Tab(
-      text:'Listening',
+      text: 'Listening',
     ),
   ];
   List<Widget> tabsContent = [
-   SurahsPage(),
-   ReadersListPage(),
+    SurahsPage(),
+    ReadersListPage(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -30,7 +31,11 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(),
         body: Column(
           children: [
-            TabBar(tabs: tabs,labelColor: Colors.black,dividerColor: Colors.green,tabAlignment: TabAlignment.fill),
+            TabBar(
+                tabs: tabs,
+                indicatorColor: Colors.green,
+                labelColor: Colors.black,
+                tabAlignment: TabAlignment.fill),
             Expanded(
               child: TabBarView(
                 children: tabsContent,

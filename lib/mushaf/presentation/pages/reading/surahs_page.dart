@@ -25,90 +25,117 @@ class _SurahsPageState extends State<SurahsPage> {
       child: Scaffold(
         body: BlocBuilder<SurahsCubit, SurahsStates>(
           builder: (context, state) {
-            return ListView.separated(
-                itemBuilder: (context, index) => InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AyahsPage(
-                                    surahName: state.surahs[index].name ?? "",
-                                    ayahs: state.surahs[index].ayahs ?? [])));
-                      },
-                      child: Container(
-                        height: 70,
-                        child: Card(
-                            elevation: 10,
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.green,
-                                  radius: 18,
-                                  child: CircleAvatar(
-                                    radius: 15,
-                                    backgroundColor: Colors.white,
-                                    child: Text(
-                                        replaceArabicNumber('${index + 1}')),
+            print(state);
+            if (state is SurahsSuccessState) {
+              return ListView.separated(
+                  itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AyahsPage(
+                                      surahName: state.surahs[index].name ?? "",
+                                      ayahs: state.surahs[index].ayahs ?? [])));
+                        },
+                        child: Container(
+                          height: 70,
+                          child: Card(
+                              elevation: 10,
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.green,
+                                    radius: 18,
+                                    child: CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: Colors.white,
+                                      child: Text(
+                                          replaceArabicNumber('${index + 1}')),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        state.surahs[index].name ?? '',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            replaceRevelationType(state
-                                                    .surahs[index]
-                                                    .revelationType ??
-                                                ''),
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          state.surahs[index].name ?? '',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              replaceRevelationType(state
+                                                      .surahs[index]
+                                                      .revelationType ??
+                                                  ''),
+                                              style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.4),
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            '،',
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
+                                            SizedBox(
+                                              width: 5,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            '${replaceArabicNumber(state.surahs[index].ayahs?.length.toString() ?? '')} آية',
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
+                                            Text(
+                                              '،',
+                                              style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.4),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '${replaceArabicNumber(state.surahs[index].ayahs?.length.toString() ?? '')} آية',
+                                              style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.4),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
                       ),
-                    ),
-                separatorBuilder: (context, index) => SizedBox(
-                      height: 10,
-                    ),
-                itemCount: state.surahs.length);
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: 10,
+                      ),
+                  itemCount: state.surahs.length);
+            }
+            else if (state is SurahsLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.green,
+                ),
+              );
+            } else {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No internet connection'),
+                    MaterialButton(
+                        color: Colors.green,
+                        child: Text('Retry'),
+                        onPressed: () {
+                          SurahsCubit.get(context).getSurahs();
+                        })
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),
