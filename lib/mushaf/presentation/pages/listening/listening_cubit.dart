@@ -22,7 +22,7 @@ class ListeningCubit extends Cubit<ListeningStates>
     }
     catch(e)
     {
-      emit(GetReadersErrorState(errorMessage:e.toString() ));
+      emit(GetReadersErrorState(errorMessage:e.toString()));
     }
   }
 
