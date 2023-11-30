@@ -45,7 +45,6 @@ class _PlayingState extends State<Playing> {
                     onPressed: () {}, icon: const Icon(Icons.skip_previous)),
                 IconButton(
                     onPressed: () {
-
                       player
                           .play(UrlSource(widget.surah.ayahs?[0].audio ?? ''));
                       int i = 1;
