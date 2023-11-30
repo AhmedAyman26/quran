@@ -10,5 +10,5 @@ class AyahModel extends Equatable
   const AyahModel({this.number, this.text, this.sajda,this.audio});
 
   @override
-  List<Object?> get props => throw [number,text,sajda,audio];
+  List<Object?> get props => [number,text,sajda,audio];
 }

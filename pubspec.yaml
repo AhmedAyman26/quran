@@ -39,7 +39,7 @@ dependencies:
   dio:
   flutter_bloc:
   get_it:
-  just_audio:
+  audioplayers:
 dev_dependencies:
   flutter_test:
     sdk: flutter
