@@ -44,7 +44,7 @@ class _PlayingState extends State<Playing> {
                     child: Column(
                       children: [
                         Text(widget.surah.name ?? '',style: const TextStyle(color: Colors.white,fontSize: 20),),
-                        Text(widget.reader ?? '',style: const TextStyle(color: Colors.white,fontSize: 14),),
+                        Text(widget.reader,style: const TextStyle(color: Colors.white,fontSize: 14),),
                         Slider(
                           activeColor: Colors.green,
                           value: 0.1,
