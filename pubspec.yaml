@@ -41,6 +41,8 @@ dependencies:
   get_it:
   audioplayers:
   shimmer:
+  flutter_ffmpeg: ^0.4.2
+  path_provider:
 dev_dependencies:
   flutter_test:
     sdk: flutter

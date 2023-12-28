@@ -8,22 +8,24 @@ import 'package:quran/mushaf/presentation/pages/listening/playing.dart';
 
 class ReaderPage extends StatelessWidget {
   final String identifier;
+  final String reader;
 
-  const ReaderPage({Key? key, required this.identifier}) : super(key: key);
+  const ReaderPage({Key? key, required this.identifier, required this.reader}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ListeningCubit(injector(), injector()),
-      child: ReaderPageBody(identifier: identifier,),);
+      child: ReaderPageBody(identifier: identifier,reader: reader),);
   }
 }
 
 class ReaderPageBody extends StatefulWidget {
 
   final String identifier;
+  final String reader;
 
-  const ReaderPageBody({Key? key, required this.identifier}) : super(key: key);
+  const ReaderPageBody({Key? key, required this.identifier, required this.reader}) : super(key: key);
 
   @override
   State<ReaderPageBody> createState() => _ReaderPageBodyState();
@@ -56,7 +58,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
                           {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
-                                      Playing(surah: state.surahs![index]),),);
+                                      Playing(surah: state.surahs![index], reader: widget.reader,),),);
                             // player.play(UrlSource(state.surahs?[index].ayahs?[0].audio??''));
                             //   int i=1;
                             //   player.onPlayerComplete.listen((_) {

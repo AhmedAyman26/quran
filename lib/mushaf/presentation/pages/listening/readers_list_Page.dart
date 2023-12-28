@@ -36,10 +36,10 @@ class _ReadersListPageState extends State<ReadersListPage> {
                               MaterialPageRoute(
                                 builder: (context) => ReaderPage(
                                     identifier:
-                                        state.readers?[index].identifier ?? ''),
+                                        state.readers?[index].identifier ?? '', reader: state.readers?[index].name??'',),
                               ));
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 70,
                           child: Card(
                               elevation: 10,
@@ -56,7 +56,7 @@ class _ReadersListPageState extends State<ReadersListPage> {
                               )),
                         ),
                       ),
-                  separatorBuilder: (context, index) => SizedBox(
+                  separatorBuilder: (context, index) => const SizedBox(
                         height: 10,
                       ),
                   itemCount: state.readers?.length ?? 0);
