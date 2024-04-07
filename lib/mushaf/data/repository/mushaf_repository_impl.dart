@@ -58,4 +58,11 @@ class MushafRepositoryImpl extends MushafRepository {
     }
     throw Exception();
   }
+
+  @override
+  Future<String> getSurahAudio(int surahNumber, String readerIdentifier)async {
+    final surahAudioUrl= "${ApiConstants.getSurahAudioUrl}/$readerIdentifier/$surahNumber.mp3";
+
+      return surahAudioUrl;
+  }
 }

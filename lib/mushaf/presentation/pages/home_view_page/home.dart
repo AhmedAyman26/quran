@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran/mushaf/presentation/pages/listening/readers_list_Page.dart';
-import 'package:quran/mushaf/presentation/pages/reading/surahs_page.dart';
+import 'package:quran/mushaf/presentation/pages/listening/all_readers_page/readers_list_Page.dart';
+
+import '../reading/all_surahs_page/surahs_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,16 +12,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Tab> tabs = [
-    Tab(
+    const Tab(
       text: 'Reading',
     ),
-    Tab(
+    const Tab(
       text: 'Listening',
     ),
   ];
   List<Widget> tabsContent = [
-    SurahsPage(),
-    ReadersListPage(),
+    const SurahPage(),
+    const ReadersListPage(),
   ];
 
   @override

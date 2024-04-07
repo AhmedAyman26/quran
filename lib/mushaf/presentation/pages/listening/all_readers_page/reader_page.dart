@@ -1,31 +1,31 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran/mushaf/di/mushaf_di.dart';
+import 'package:quran/mushaf/domain/models/surah_model.dart';
 import 'package:quran/mushaf/presentation/pages/listening/listening_cubit.dart';
 import 'package:quran/mushaf/presentation/pages/listening/listening_states.dart';
-import 'package:quran/mushaf/presentation/pages/listening/playing.dart';
+import 'package:quran/mushaf/presentation/pages/listening/playing_page/playing.dart';
 
 class ReaderPage extends StatelessWidget {
-  final String identifier;
-  final String reader;
+  final String readerIdentifier;
+  final String readerName;
 
-  const ReaderPage({Key? key, required this.identifier, required this.reader}) : super(key: key);
+  const ReaderPage({Key? key, required this.readerIdentifier, required this.readerName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ListeningCubit(injector(), injector()),
-      child: ReaderPageBody(identifier: identifier,reader: reader),);
+      create: (context) => ListeningCubit(injector(), injector(),injector()),
+      child: ReaderPageBody(readerIdentifier: readerIdentifier,readerName: readerName),);
   }
 }
 
 class ReaderPageBody extends StatefulWidget {
 
-  final String identifier;
-  final String reader;
+  final String readerIdentifier;
+  final String readerName;
 
-  const ReaderPageBody({Key? key, required this.identifier, required this.reader}) : super(key: key);
+  const ReaderPageBody({Key? key, required this.readerIdentifier, required this.readerName}) : super(key: key);
 
   @override
   State<ReaderPageBody> createState() => _ReaderPageBodyState();
@@ -34,11 +34,10 @@ class ReaderPageBody extends StatefulWidget {
 class _ReaderPageBodyState extends State<ReaderPageBody> {
   @override
   void initState() {
-    ListeningCubit.get(context).getMushafByReader(widget.identifier);
+    ListeningCubit.get(context).getMushafByReader(widget.readerIdentifier);
     super.initState();
   }
 
-  AudioPlayer player = AudioPlayer();
   bool isPlayed = false;
 
   @override
@@ -48,7 +47,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
       body: BlocBuilder<ListeningCubit, ListeningStates>(
         builder: (context, state) {
           print(state);
-          if (state is GetMushafByReadersSuccessState) {
+          if (state is ListeningSuccessState) {
             return ListView.separated(
                 itemBuilder: (context, index) =>
                     Column(
@@ -56,17 +55,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
                         InkWell(
                           onTap: () async
                           {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) =>
-                                      Playing(surah: state.surahs![index], reader: widget.reader,),),);
-                            // player.play(UrlSource(state.surahs?[index].ayahs?[0].audio??''));
-                            //   int i=1;
-                            //   player.onPlayerComplete.listen((_) {
-                            //     if (i<state.surahs![index].ayahs!.length) {
-                            //       player.play(UrlSource(state.surahs![index].ayahs![i].audio??''));
-                            //       i++;
-                            //     }
-                            //   });
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => PlayingPage(surah: state.surahs?[index]??SurahModel(), readerIdentifier: widget.readerIdentifier,readerName: widget.readerName,)));
                           },
                           child: SizedBox(
                             height: 70,
@@ -130,7 +119,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
                 ),
                 itemCount: state.surahs?.length ?? 0);
           }
-          else if (state is GetMushafByReadersErrorState) {
+          else if (state is ListeningErrorState) {
             return Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,7 +131,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
                       child: const Text('Retry'),
                       onPressed: () {
                         ListeningCubit.get(context).getMushafByReader(
-                            widget.identifier);
+                            widget.readerIdentifier);
                       })
                 ],
               ),

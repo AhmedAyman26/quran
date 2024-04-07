@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quran/mushaf/presentation/pages/reading/ayahs_page.dart';
-import 'package:quran/mushaf/presentation/pages/reading/surahs_cubit.dart';
-import 'package:quran/mushaf/presentation/pages/reading/surahs_states.dart';
+import 'package:quran/mushaf/di/mushaf_di.dart';
+import 'package:quran/mushaf/presentation/pages/reading/all_surahs_page/surahs_cubit.dart';
+import 'package:quran/mushaf/presentation/pages/reading/all_surahs_page/surahs_states.dart';
+import 'package:quran/mushaf/presentation/pages/reading/reading_page.dart';
 import 'package:shimmer/shimmer.dart';
 
-class SurahsPage extends StatefulWidget {
-  const SurahsPage({Key? key}) : super(key: key);
+class SurahPage extends StatelessWidget {
+  const SurahPage({super.key});
 
   @override
-  State<SurahsPage> createState() => _SurahsPageState();
+  Widget build(BuildContext context) {
+    return  BlocProvider(create: (context) => SurahsCubit(injector()),child: const SurahPageBody(),);
+  }
 }
 
-class _SurahsPageState extends State<SurahsPage> {
+class SurahPageBody extends StatefulWidget {
+  const SurahPageBody({Key? key}) : super(key: key);
+
+  @override
+  State<SurahPageBody> createState() => _SurahPageBodyState();
+}
+
+class _SurahPageBodyState extends State<SurahPageBody> {
   @override
   void initState() {
     SurahsCubit.get(context).getSurahs();

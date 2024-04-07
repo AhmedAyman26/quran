@@ -1,18 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quran/mushaf/di/mushaf_di.dart';
 import 'package:quran/mushaf/presentation/pages/listening/listening_cubit.dart';
 import 'package:quran/mushaf/presentation/pages/listening/listening_states.dart';
-import 'package:quran/mushaf/presentation/pages/listening/reader_page.dart';
+import 'package:quran/mushaf/presentation/pages/listening/all_readers_page/reader_page.dart';
 
-class ReadersListPage extends StatefulWidget {
-  const ReadersListPage({Key? key}) : super(key: key);
+
+class ReadersListPage extends StatelessWidget {
+  const ReadersListPage({super.key});
 
   @override
-  State<ReadersListPage> createState() => _ReadersListPageState();
+  Widget build(BuildContext context) {
+    return  BlocProvider(create: (context) => ListeningCubit(injector(), injector(), injector()),child: const ReadersListPageBody(),);
+  }
 }
 
-class _ReadersListPageState extends State<ReadersListPage> {
+class ReadersListPageBody extends StatefulWidget {
+  const ReadersListPageBody({Key? key}) : super(key: key);
+
+  @override
+  State<ReadersListPageBody> createState() => _ReadersListPageBodyState();
+}
+
+class _ReadersListPageBodyState extends State<ReadersListPageBody> {
   @override
   void initState() {
     ListeningCubit.get(context).getReaders();
@@ -26,8 +37,7 @@ class _ReadersListPageState extends State<ReadersListPage> {
       child: Scaffold(
         body: BlocBuilder<ListeningCubit, ListeningStates>(
           builder: (context, state) {
-            print(state);
-            if (state is GetReadersSuccessState) {
+            if (state is ListeningSuccessState && state.readers != null) {
               return ListView.separated(
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
@@ -35,8 +45,8 @@ class _ReadersListPageState extends State<ReadersListPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ReaderPage(
-                                    identifier:
-                                        state.readers?[index].identifier ?? '', reader: state.readers?[index].name??'',),
+                                    readerIdentifier:
+                                        state.readers?[index].identifier ?? '', readerName: state.readers?[index].name??'',),
                               ));
                         },
                         child: SizedBox(
@@ -50,7 +60,7 @@ class _ReadersListPageState extends State<ReadersListPage> {
                                 children: [
                                   Text(
                                     state.readers?[index].name ?? '',
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               )),
@@ -60,7 +70,7 @@ class _ReadersListPageState extends State<ReadersListPage> {
                         height: 10,
                       ),
                   itemCount: state.readers?.length ?? 0);
-            } else if (state is GetReadersLoadingState) {
+            } else if (state is ListeningLoadingState) {
               return const Center(
                 child: CircularProgressIndicator(
                   color: Colors.green,

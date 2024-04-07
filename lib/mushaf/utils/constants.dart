@@ -4,4 +4,6 @@ class ApiConstants
   static String getSurahsPath="$baseUrl/quran/quran-uthmani";
   static String getReadersPath="$baseUrl/edition";
   static String getReaderMushafPath="$baseUrl/quran";
+
+  static String getSurahAudioUrl= "https://cdn.islamic.network/quran/audio-surah/128";
 }

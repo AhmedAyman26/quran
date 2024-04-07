@@ -7,4 +7,5 @@ abstract class MushafRepository
   Future<List<SurahModel>> getSurahs();
   Future<List<ReaderModel>> getReaders();
   Future<List<SurahModel>> getMushafByReader(String identifier);
+  Future<String> getSurahAudio(int surahNumber,String readerIdentifier);
 }
