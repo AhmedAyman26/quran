@@ -11,17 +11,16 @@ class PlayingPage extends StatelessWidget {
   final String readerName;
   final String readerIdentifier;
 
-  const PlayingPage({super.key,
-    required this.surah,
-    required this.readerName,
-    required this.readerIdentifier
-  });
+  const PlayingPage(
+      {super.key,
+      required this.surah,
+      required this.readerName,
+      required this.readerIdentifier});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      ListeningCubit(injector(), injector(), injector())
+      create: (context) => ListeningCubit(injector(), injector(), injector())
         ..getSurahAudio(surah: surah, readerIdentifier: readerIdentifier),
       child: PlayingPageBody(
         surah: surah,
@@ -35,8 +34,11 @@ class PlayingPageBody extends StatefulWidget {
   final SurahModel surah;
   final String readerName;
 
-  const PlayingPageBody({Key? key, required this.surah, required this.readerName,})
-      : super(key: key);
+  const PlayingPageBody({
+    Key? key,
+    required this.surah,
+    required this.readerName,
+  }) : super(key: key);
 
   @override
   State<PlayingPageBody> createState() => _PlayingPageBodyState();
@@ -46,9 +48,27 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
   late final AudioPlayer player;
   bool isPlaying = false;
 
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
   @override
   void initState() {
     player = AudioPlayer();
+    player.onPlayerStateChanged.listen((event) {
+      isPlaying = event == PlayerState.playing;
+    });
+
+    player.onDurationChanged.listen((newDuration) {
+      setState(() {
+        duration = newDuration;
+      });
+    });
+
+    player.onPositionChanged.listen((newPosition) {
+      setState(() {
+        position = newPosition;
+      });
+    });
     super.initState();
   }
 
@@ -58,10 +78,9 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
       children: [
         const Positioned.fill(
             child: Image(
-              image: NetworkImage(
-                  'https://wallpapercave.com/wp/wp11370776.jpg'),
-              fit: BoxFit.fill,
-            )),
+          image: NetworkImage('https://wallpapercave.com/wp/wp11370776.jpg'),
+          fit: BoxFit.fill,
+        )),
         PopScope(
             onPopInvoked: (o) {
               player.pause();
@@ -88,18 +107,30 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
                           style: const TextStyle(
                               color: Colors.white, fontSize: 14),
                         ),
-                        //                     Slider(
-                        //                       label: player.().toString(),
-                        //                       activeColor: Colors.green,
-                        //                       value: 0.1,
-                        //                       onChanged: (value)
-                        // {
-                        //   player.seek(position)
-                        // },
-                        //                     ),
+                        Slider(
+                          min: 0,
+                          max: duration.inSeconds.toDouble(),
+                          value: position.inSeconds.toDouble(),
+                          activeColor: Colors.green,
+                          onChanged: (value) async {
+                            final position = Duration(seconds: value.toInt());
+                            await player.seek(position);
+                          },
+                        ),
+                        duration!=Duration.zero ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatTime(position),style: TextStyle(color: Colors.white),),
+                              Text(formatTime(duration-position),style:TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ): const SizedBox(),
                         BlocBuilder<ListeningCubit, ListeningStates>(
                           builder: (context, state) {
-                            if(state is ListeningSuccessState && state.surahAudioUrl != null) {
+                            if (state is ListeningSuccessState &&
+                                state.surahAudioUrl != null) {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -112,12 +143,8 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
                                   IconButton(
                                     onPressed: () {
                                       if (!isPlaying) {
-                                        player
-                                            .play(
-                                            UrlSource(
-                                                state.surahAudioUrl ?? ''))
-                                            .then((value) =>
-                                            player.getDuration());
+                                        player.play(UrlSource(
+                                            state.surahAudioUrl ?? ''));
                                         setState(() {
                                           isPlaying = true;
                                         });
@@ -141,7 +168,8 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
                                 ],
                               );
                             }
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           },
                         ),
                       ],
@@ -153,4 +181,17 @@ class _PlayingPageBodyState extends State<PlayingPageBody> {
       ],
     );
   }
+}
+
+String formatTime(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final hours = twoDigits(duration.inHours);
+  String minutes = twoDigits(duration.inMinutes.remainder(60));
+  String seconds = twoDigits(duration.inSeconds.remainder(60));
+
+  return [
+    if(duration.inHours > 0) hours,
+    minutes,
+    seconds
+  ].join(':');
 }
