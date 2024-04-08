@@ -43,10 +43,11 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.readerName),
+      ),
       body: BlocBuilder<ListeningCubit, ListeningStates>(
         builder: (context, state) {
-          print(state);
           if (state is ListeningSuccessState) {
             return ListView.separated(
                 itemBuilder: (context, index) =>
@@ -55,7 +56,7 @@ class _ReaderPageBodyState extends State<ReaderPageBody> {
                         InkWell(
                           onTap: () async
                           {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => PlayingPage(surah: state.surahs?[index]??SurahModel(), readerIdentifier: widget.readerIdentifier,readerName: widget.readerName,)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => PlayingPage(surah: state.surahs?[index]??const SurahModel(), readerIdentifier: widget.readerIdentifier,readerName: widget.readerName,)));
                           },
                           child: SizedBox(
                             height: 70,
